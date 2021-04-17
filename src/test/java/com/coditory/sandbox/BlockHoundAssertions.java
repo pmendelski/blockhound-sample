@@ -26,7 +26,7 @@ class BlockHoundAssertions {
 
     private static <T> T runOnParallel(Callable<T> callable) {
         return Mono.fromCallable(callable)
-                .publishOn(Schedulers.parallel())
+                .subscribeOn(Schedulers.parallel())
                 .block();
     }
 }
