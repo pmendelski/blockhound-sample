@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+}
+
+group = "com.coditory.sandbox"
+version = "0.0.1-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.projectreactor:reactor-core:3.4.5"
+    implementation "io.projectreactor.tools:blockhound:1.0.6.RELEASE"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.1"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.1"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType(JavaCompile) {
+    // make all test/main builds use UTF-8
+    options.encoding = 'UTF-8'
+    // compile only changed files
+    options.incremental = true
+    // skip JsonCreator from Jackson
+    options.compilerArgs << "-parameters"
+    // error instead of warn on lint problems
+    options.compilerArgs << "-Werror"
+    options.compilerArgs << "-Xlint"
+    options.compilerArgs << "-Xlint:-serial"
+    options.compilerArgs << "-Xlint:-processing"
+    options.compilerArgs << "-Xlint:-try"
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+        events = ['passed', 'skipped', 'failed']
+    }
+}
